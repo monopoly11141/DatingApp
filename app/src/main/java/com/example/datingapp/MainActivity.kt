@@ -1,14 +1,18 @@
 package com.example.datingapp
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.databinding.DataBindingUtil
+import com.example.datingapp.auth.IntroActivity
 import com.example.datingapp.databinding.ActivityMainBinding
 import com.example.datingapp.slider.CardStackAdapter
+import com.google.firebase.auth.ktx.auth
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager
 import com.yuyakaido.android.cardstackview.CardStackListener
 import com.yuyakaido.android.cardstackview.Direction
+import com.google.firebase.ktx.Firebase as Firebase
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,6 +28,15 @@ class MainActivity : AppCompatActivity() {
 
         // binding variables
         val csvProfile = binding.csvProfile
+        val imgLogout = binding.imgLogout
+
+        imgLogout.setOnClickListener {
+            val auth = Firebase.auth
+            auth.signOut()
+
+            val intentToIntroActivity = Intent(this, IntroActivity::class.java)
+            startActivity(intentToIntroActivity)
+        }
 
         cardStackLayoutManager = CardStackLayoutManager(baseContext, object : CardStackListener{
             override fun onCardDragging(direction: Direction?, ratio: Float) {
