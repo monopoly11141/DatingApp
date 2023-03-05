@@ -7,9 +7,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.databinding.DataBindingUtil
-import com.example.datingapp.auth.IntroActivity
 import com.example.datingapp.auth.UserDataModel
 import com.example.datingapp.databinding.ActivityMainBinding
+import com.example.datingapp.setting.MyPageActivity
+import com.example.datingapp.setting.SettingActivity
 import com.example.datingapp.slider.CardStackAdapter
 import com.example.datingapp.utils.FirebaseRefUtils
 import com.google.firebase.auth.ktx.auth
@@ -40,11 +41,8 @@ class MainActivity : AppCompatActivity() {
         val imgLogout = binding.imgLogout
 
         imgLogout.setOnClickListener {
-            val auth = Firebase.auth
-            auth.signOut()
-
-            val intentToIntroActivity = Intent(this, IntroActivity::class.java)
-            startActivity(intentToIntroActivity)
+            val intentToSettingActivity = Intent(this, SettingActivity::class.java)
+            startActivity(intentToSettingActivity)
         }
 
         cardStackLayoutManager = CardStackLayoutManager(baseContext, object : CardStackListener{
@@ -78,20 +76,21 @@ class MainActivity : AppCompatActivity() {
 
     private fun getDataUserDataList() {
         // Read from the database
-        FirebaseRefUtils.userInfoRef.addValueEventListener(object : ValueEventListener {
+        val postListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for(dataModel in dataSnapshot.children) {
                     val user = dataModel.getValue(UserDataModel::class.java)
                     usersDataList.add(user!!)
 
                 }
-                cardStackAdapter.notifyItemInserted(0)
+                cardStackAdapter.notifyDataSetChanged()
             }
-
-            override fun onCancelled(error: DatabaseError) {
+            override fun onCancelled(databaseError: DatabaseError) {
                 // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException())
+                Log.w(TAG, "Failed to read value.", databaseError.toException())
             }
-        })
+        }
+        FirebaseRefUtils.userInfoRef.addValueEventListener(postListener)
+
     }
 }

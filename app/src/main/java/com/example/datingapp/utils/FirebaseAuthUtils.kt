@@ -8,13 +8,10 @@ class FirebaseAuthUtils {
 
         private lateinit var auth: FirebaseAuth
 
-        fun getUid() : String? {
+        fun getUid(): String {
             auth = FirebaseAuth.getInstance()
-            if(auth.currentUser == null) {
-                return null
-            }else {
-                return auth.currentUser?.uid.toString()
-            }
+            return auth.currentUser?.uid.toString()
+
         }
     }
 }

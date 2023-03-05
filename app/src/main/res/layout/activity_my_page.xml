@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".setting.MyPageActivity">
+
+    <ImageView
+        android:id="@+id/imgMyImg"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:layout_margin="10dp" />
+
+    <TextView
+        android:id="@+id/tvMyUid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="myUid"
+        android:textSize="24sp" />
+
+
+    <TextView
+        android:id="@+id/tvMyNickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="myNickname"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/tvMyAge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="myAge"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/tvMyLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="myLocation"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/tvMySex"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="mySec"
+        android:textSize="24sp" />
+
+
+</LinearLayout>
