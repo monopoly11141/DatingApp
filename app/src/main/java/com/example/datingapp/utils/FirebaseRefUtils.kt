@@ -9,6 +9,8 @@ class FirebaseRefUtils {
         val database = Firebase.database
 
         val userInfoRef = database.getReference("user info")
+
+        val userLikeRef = database.getReference("user like")
     }
 
 }
