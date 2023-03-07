@@ -17,6 +17,14 @@
             android:textSize="36sp" />
 
         <Button
+            android:id="@+id/btnMyMatching"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:text="My Matching List"
+            android:textSize="36sp" />
+
+        <Button
             android:id="@+id/btnLogout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
