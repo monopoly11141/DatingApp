@@ -107,11 +107,6 @@ class MyLikeListActivity : AppCompatActivity() {
                             ).show()
                             break
                         } else {
-                            Toast.makeText(
-                                this@MyLikeListActivity,
-                                "매칭이 되지 않았습니다.",
-                                Toast.LENGTH_SHORT
-                            ).show()
                         }
 
                     }

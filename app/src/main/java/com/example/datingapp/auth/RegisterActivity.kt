@@ -4,27 +4,29 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.example.datingapp.MainActivity
 import com.example.datingapp.R
 import com.example.datingapp.databinding.ActivityRegisterBinding
 import com.example.datingapp.utils.FirebaseRefUtils
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.ktx.storage
 import java.io.ByteArrayOutputStream
 
 class RegisterActivity : AppCompatActivity() {
 
-    private lateinit var binding : ActivityRegisterBinding
+    private lateinit var binding: ActivityRegisterBinding
     private lateinit var auth: FirebaseAuth
 
     private var nickname = ""
@@ -32,6 +34,8 @@ class RegisterActivity : AppCompatActivity() {
     private var location = ""
     private var age = ""
     private var uid = ""
+    val TAG = "RegisterActivity"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +69,7 @@ class RegisterActivity : AppCompatActivity() {
             location = tietLocation.text.toString()
             age = tietAge.text.toString()
 
-            if(email.isEmpty()) {
+            if (email.isEmpty()) {
                 Toast.makeText(this, "이메일 입력해주세요.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -77,14 +81,31 @@ class RegisterActivity : AppCompatActivity() {
                         val user = auth.currentUser
                         uid = user?.uid.toString()
 
-                        val userDataModel = UserDataModel(uid, nickname, sex, location, age)
+                        FirebaseMessaging.getInstance().token.addOnCompleteListener(
+                            OnCompleteListener { task ->
+                                if (!task.isSuccessful) {
 
-                        FirebaseRefUtils.userInfoRef.child(uid).setValue(userDataModel)
+                                    Log.w(
+                                        TAG,
+                                        "Fetching FCM registration token failed",
+                                        task.exception
+                                    )
+                                    return@OnCompleteListener
+                                }
 
-                        uploadImage(uid)
+                                // Get new FCM registration token
+                                val token = task.result
+                                Log.e(TAG, token.toString())
 
-                        val intentToMainActivity = Intent(this, MainActivity::class.java)
-                        startActivity(intentToMainActivity)
+                                val userDataModel = UserDataModel(uid, nickname, sex, location, age, token)
+
+                                FirebaseRefUtils.userInfoRef.child(uid).setValue(userDataModel)
+
+                                uploadImage(uid)
+
+                                val intentToMainActivity = Intent(this, MainActivity::class.java)
+                                startActivity(intentToMainActivity)
+                            })
 
                     } else {
                         Toast.makeText(this, "회원가입 실패", Toast.LENGTH_SHORT).show()
@@ -95,15 +116,15 @@ class RegisterActivity : AppCompatActivity() {
 
     }
 
-    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            result: ActivityResult ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val intent = result.data
-            binding.imgProfile.setImageURI(intent?.data)
+    private val startForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val intent = result.data
+                binding.imgProfile.setImageURI(intent?.data)
+            }
         }
-    }
 
-    private fun uploadImage(uid : String) {
+    private fun uploadImage(uid: String) {
 
         val storage = Firebase.storage
         val storageRef = storage.reference.child("${uid}.png")
