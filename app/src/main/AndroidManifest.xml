@@ -44,6 +44,17 @@
         <activity
             android:name=".MainActivity"
             android:exported="true" />
+
+        <service
+            android:name="com.google.firebase.messaging.FirebaseMessagingService"
+            android:enabled="true"
+            tools:replace="android:exported"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>

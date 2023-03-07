@@ -92,9 +92,7 @@ class MyLikeListActivity : AppCompatActivity() {
     private fun checkMatching(clickedUid: String) {
         // Read from the database
         val postListener = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-
-
+            override fun onDataChange(dataSnapshot: DataSnapshot) =
                 if (dataSnapshot.children.count() == 0) {
                     Toast.makeText(this@MyLikeListActivity, "매칭이 되지 않았습니다.", Toast.LENGTH_SHORT)
                         .show()
@@ -119,8 +117,6 @@ class MyLikeListActivity : AppCompatActivity() {
                     }
 
                 }
-
-            }
 
             override fun onCancelled(databaseError: DatabaseError) {
                 // Failed to read value
