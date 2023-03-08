@@ -8,11 +8,17 @@ import androidx.databinding.DataBindingUtil
 import com.example.datingapp.R
 import com.example.datingapp.auth.UserDataModel
 import com.example.datingapp.databinding.ActivityMyLikeListBinding
+import com.example.datingapp.message.fcm.NotificationModel
+import com.example.datingapp.message.fcm.PushNotification
+import com.example.datingapp.message.fcm.RetrofitInstance
 import com.example.datingapp.utils.FirebaseAuthUtils
 import com.example.datingapp.utils.FirebaseRefUtils
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MyLikeListActivity : AppCompatActivity() {
 
@@ -39,6 +45,12 @@ class MyLikeListActivity : AppCompatActivity() {
         lvUserList.setOnItemClickListener { parent, view, position, id ->
             checkMatching(likeUserList[position].uid.toString())
             //Log.d(TAG, likeUserList[position].uid.toString())
+
+            val notificationModel = NotificationModel("a", "b")
+
+            val pushModel = PushNotification(notificationModel, likeUserList[position].token.toString())
+
+            testPush(pushModel)
         }
 
     }
@@ -119,6 +131,12 @@ class MyLikeListActivity : AppCompatActivity() {
             }
         }
         FirebaseRefUtils.userLikeRef.child(clickedUid).addValueEventListener(postListener)
+    }
+
+    private fun testPush(notification: PushNotification) = CoroutineScope(Dispatchers.IO).launch {
+
+        RetrofitInstance.api.postNotification(notification)
+
     }
 
 

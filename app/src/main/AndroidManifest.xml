@@ -14,6 +14,25 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DatingApp"
         tools:targetApi="31">
+
+        <service
+            android:name="com.google.firebase.messaging.FirebaseMessagingService"
+            android:enabled="true"
+            tools:replace="android:exported"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".message.fcm.FirebaseService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
         <activity
             android:name=".message.MyLikeListActivity"
             android:exported="false" />
@@ -45,15 +64,7 @@
             android:name=".MainActivity"
             android:exported="true" />
 
-        <service
-            android:name="com.google.firebase.messaging.FirebaseMessagingService"
-            android:enabled="true"
-            tools:replace="android:exported"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
+
 
     </application>
 
